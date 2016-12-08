@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en" ng-app="concurrentUpdate">
+
+<head>
+    <meta charset="utf-8">
+    <title>Concurrent update demo</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+    <div class='container' ng-controller="EditPatientController">
+        <h1>Concurrent update demo</h1>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="input-group">
+                            <select class="form-control" ng-model="selectedProvider" ng-change="setIsDisableControls()">
+                                <option value="0">--- Please select provider ---</option>
+                                <option ng-repeat="provider in providers" value="{{provider.id}}">{{provider.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="input-group">
+                            <select class="form-control" ng-model="selectedUser" ng-disabled="isDisableControls">
+                               <option value="0">--- Please select user ---</option>
+                                <option ng-repeat="user in users  | filter:{providerId:selectedProvider}" value="{{user.userId}}">{{user.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="input-group">
+                            <select class="form-control" ng-model="selectedpatient" ng-disabled="isDisableControls">
+                               <option value="0">--- Please select patient ---</option>
+                                <option ng-repeat="patient in patients  | filter:{providerId:selectedProvider}" value="{{patient.patientId}}">{{patient.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <form id="editPatient-53467" name="editPatient-53467">
+                    <div class="alert alert-info" role="alert" ng-show="alertMsg" ng-bind-html="alertMsg"></div>
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input class="form-control" id="firstName" name="firstName" ng-model="patient.firstName">
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input class="form-control" id="lastName" name="lastName" ng-model="patient.lastName">
+                    </div>
+                    <div class="form-group">
+                        <label for="cellNo">Contact No.</label>
+                        <input class="form-control" id="cellNo" name="cellNo" ng-model="patient.cellNo">
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="gender" value="Male" ng-model="patient.gender"> Male
+                        </label>
+                        <label>
+                            <input type="radio" name="gender" value="Female" ng-model="patient.gender"> Female
+                        </label>
+                    </div>
+                    <button class="btn btn-default" type="reset">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="./js/jquery-1.11.2.min.js"></script>
+    <!-- AngularJS -->
+    <script src="./js/angular-1.5.8/angular.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="./js/bootstrap.min.js"></script>
+    <script src="./app.js"></script>
+</body>
+
+</html>
