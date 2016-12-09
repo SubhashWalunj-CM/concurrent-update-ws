@@ -1,15 +1,20 @@
 (function () {
     var concurrentUpdate = angular.module('concurrentUpdate', []);
 
-    concurrentUpdate.run(function ($rootScope) {
-        $rootScope["concurrentUpdateWsCon"] = new WebSocket('ws://127.0.0.1:1337');
+    concurrentUpdate.value('webSocketConstants', {
+        webSocketUrl: 'ws://127.0.0.1:1337',
+        concurrentUpdateWsCon: {}
     });
+    /*concurrentUpdate.run(function ($rootScope) {
+        $rootScope["concurrentUpdateWsCon"] = new WebSocket('ws://127.0.0.1:1337');
+    });*/
 
     var EditPatientController = function ($scope) {
-        $scope.isDisableControls = true;
+        $scope.isProviderSelected = false;
         $scope.selectedProvider = "0";
         $scope.selectedUser = "0";
         $scope.selectedPatient = "0";
+        $scope.enableControls = false;
 
         $scope.providers = [
             {
@@ -97,7 +102,7 @@
             gender: ""
         }
 
-        $scope.setIsDisableControls = function () {
+        $scope.setIsProviderSelected = function () {
             $scope.selectedUser = "0";
             $scope.selectedPatient = "0";
             $scope.editPatient = {
@@ -106,7 +111,7 @@
                 contact: "",
                 gender: ""
             }
-            $scope.isDisableControls = ($scope.selectedProvider == "0") ? true : false;
+            $scope.isProviderSelected = ($scope.selectedProvider == "0") ? false : true;
         }
 
         $scope.setEditPatient = function () {
@@ -119,40 +124,67 @@
                 });
             }
         }
+
+        $scope.setEnableControls = function () {
+            $scope.enableControls = ($scope.selectedProvider == "0" || $scope.selectedUser == "0" || $scope.selectedPatient == "0") ? false : true;
+        }
     }
     EditPatientController.$inject = ['$scope'];
     concurrentUpdate.controller('EditPatientController', EditPatientController);
 
-    var syncConcurrentUpdate = function ($rootScope, $sce) {
+    var syncConcurrentUpdateDirective = function ($rootScope, $sce, webSocketConstants) {
         return {
             require: "form",
             link: function (scope, element, attrs) {
-                scope.alertClass = "alert-info";
-                window.WebSocket = window.WebSocket || window.MozWebSocket;
-                // if browser doesn't support WebSocket, just show some notification and exit
-                if (!window.WebSocket) {
-                    scope.alertClass = "alert-warning";
-                    scope.alertMsg = $sce.trustAsHtml("Sorry, but your browser doesn support WebSockets. We cannot assist you in concurrent form updation.");
-                } else {
-                    $rootScope.concurrentUpdateWsCon.onopen = function () {
-                        scope.alertClass = "alert-success";
-                        scope.alertMsg = $sce.trustAsHtml("Ready to roll with WebSocket!");
-                        scope.$apply();
-                    };
+                scope.$watch('enableControls', function (newValue, oldValue) {
+                    if (newValue) {
+                        var formFieldData = {
+                            "firstName": "John",
+                            "lastName": "Doe",
+                            "contactNo": "",
+                            "gender": "M"
+                        };
+                        var reqJson = {
+                            "providerId": scope.selectedProvider,
+                            "patientId": scope.selectedPatient,
+                            "formId": attrs.id,
+                            "userId": scope.selectedUser,
+                            "fields": formFieldData
+                        };
+                        scope.alertClass = "alert-info";
 
-                    $rootScope.concurrentUpdateWsCon.onerror = function (error) {
-                        scope.alertClass = "alert-warning";
-                        scope.alertMsg = $sce.trustAsHtml("Sorry, but there's some problem with your connection or the server is down. We cannot assist you in concurrent form updation.");
-                        scope.$apply();
-                    };
+                        if (angular.equals(webSocketConstants.concurrentUpdateWsCon, {})) {
+                            webSocketConstants.concurrentUpdateWsCon = new WebSocket(webSocketConstants.webSocketUrl);
+                        }
 
-                    element.on("change", function () {
-                        $rootScope.concurrentUpdateWsCon.send(JSON.stringify({"fname":"Subhash","lname":"Walunj"}));
-                    });
-                }
+                        window.WebSocket = window.WebSocket || window.MozWebSocket;
+                        // if browser doesn't support WebSocket, just show some notification and exit
+                        if (!window.WebSocket) {
+                            scope.alertClass = "alert-warning";
+                            scope.alertMsg = $sce.trustAsHtml("Sorry, but your browser doesn support WebSockets. We cannot assist you in concurrent form updation.");
+                        } else {
+                            webSocketConstants.concurrentUpdateWsCon.onopen = function () {
+                                scope.alertClass = "alert-success";
+                                scope.alertMsg = $sce.trustAsHtml("Ready to roll with WebSocket!");
+                                scope.$apply();
+                                webSocketConstants.concurrentUpdateWsCon.send(JSON.stringify(reqJson));
+                            };
+
+                            webSocketConstants.concurrentUpdateWsCon.onerror = function (error) {
+                                scope.alertClass = "alert-warning";
+                                scope.alertMsg = $sce.trustAsHtml("Sorry, but there's some problem with your connection or the server is down. We cannot assist you in concurrent form updation.");
+                                scope.$apply();
+                            };
+
+                            element.on("change", function () {
+                                webSocketConstants.concurrentUpdateWsCon.send(JSON.stringify(reqJson));
+                            });
+                        }
+                    }
+                });
             }
         }
     }
-    syncConcurrentUpdate.$inject = ['$rootScope', '$sce'];
-    concurrentUpdate.directive('syncConcurrentUpdate', syncConcurrentUpdate);
+    syncConcurrentUpdateDirective.$inject = ['$rootScope', '$sce', 'webSocketConstants'];
+    concurrentUpdate.directive('syncConcurrentUpdateDirective', syncConcurrentUpdateDirective);
 })();

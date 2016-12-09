@@ -17,7 +17,7 @@
                     <div class="col-sm-4">
                         <div class="input-group">
                            <div class="input-group-addon">Provider:</div>
-                            <select class="form-control" ng-model="selectedProvider" ng-change="setIsDisableControls()">
+                            <select class="form-control" ng-model="selectedProvider" ng-change="setIsProviderSelected(); setEnableControls();">
                                 <option value="0">--- Please select provider ---</option>
                                 <option ng-repeat="provider in providers" value="{{provider.id}}">{{provider.name}}</option>
                             </select>
@@ -26,7 +26,7 @@
                     <div class="col-sm-4">
                         <div class="input-group">
                            <div class="input-group-addon">User:</div>
-                            <select class="form-control" ng-model="selectedUser" ng-disabled="isDisableControls">
+                            <select class="form-control" ng-model="selectedUser" ng-disabled="!isProviderSelected" ng-change="setEnableControls();">
                                <option value="0">--- Please select user ---</option>
                                 <option ng-repeat="user in users  | filter:{'providerId':selectedProvider}" value="{{user.userId}}">{{user.name}}</option>
                             </select>
@@ -35,7 +35,7 @@
                     <div class="col-sm-4">
                         <div class="input-group">
                            <div class="input-group-addon">Patient:</div>
-                            <select class="form-control" ng-model="selectedPatient" ng-disabled="isDisableControls" ng-change="setEditPatient()">
+                            <select class="form-control" ng-model="selectedPatient" ng-disabled="!isProviderSelected" ng-change="setEditPatient(); setEnableControls();">
                                <option value="0">--- Please select patient ---</option>
                                 <option ng-repeat="patient in patients  | filter:{'providerId':selectedProvider}" value="{{patient.patientId}}">{{patient.fname}} {{patient.lname}}</option>
                             </select>
@@ -44,26 +44,26 @@
                 </div>
             </div>
             <div class="panel-body">
-                <form id="editPatient-53467" name="editPatient-53467" sync-concurrent-update>
-                    <div class="alert" ng-class="alertClass" role="alert" ng-show="alertMsg" ng-bind-html="alertMsg"></div>
+                <form id="editPatient" name="editPatient" sync-concurrent-update-directive>
+                    <div class="alert" ng-class="alertClass" role="alert" ng-show="alertMsg && enableControls" ng-bind-html="alertMsg"></div>
                     <div class="form-group">
                         <label for="firstName">First Name</label>
-                        <input class="form-control" id="firstName" name="firstName" ng-model="editPatient.fname">
+                        <input class="form-control" id="firstName" name="firstName" ng-model="editPatient.fname" ng-disabled="!enableControls">
                     </div>
                     <div class="form-group">
                         <label for="lastName">Last Name</label>
-                        <input class="form-control" id="lastName" name="lastName" ng-model="editPatient.lname">
+                        <input class="form-control" id="lastName" name="lastName" ng-model="editPatient.lname" ng-disabled="!enableControls">
                     </div>
                     <div class="form-group">
                         <label for="cellNo">Contact No.</label>
-                        <input class="form-control" id="cellNo" name="cellNo" ng-model="editPatient.contact">
+                        <input class="form-control" id="cellNo" name="cellNo" ng-model="editPatient.contact" ng-disabled="!enableControls">
                     </div>
                     <div class="radio">
                         <label>
-                            <input type="radio" name="gender" value="Male" ng-model="editPatient.gender"> Male
+                            <input type="radio" name="gender" value="Male" ng-model="editPatient.gender" ng-disabled="!enableControls"> Male
                         </label>
                         <label>
-                            <input type="radio" name="gender" value="Female" ng-model="editPatient.gender"> Female
+                            <input type="radio" name="gender" value="Female" ng-model="editPatient.gender" ng-disabled="!enableControls"> Female
                         </label>
                     </div>
                     <button class="btn btn-default" type="reset">Cancel</button>
