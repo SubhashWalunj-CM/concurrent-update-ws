@@ -16,8 +16,8 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="input-group">
-                           <div class="input-group-addon">Provider:</div>
-                            <select class="form-control" ng-model="selectedProvider" ng-change="setIsProviderSelected(); setEnableControls();">
+                            <div class="input-group-addon">Provider:</div>
+                            <select class="form-control" ng-model="selectedProvider" ng-change="setIsProviderSelected(); setEnableControls();" ng-disabled="enableControls">
                                 <option value="0">--- Please select provider ---</option>
                                 <option ng-repeat="provider in providers" value="{{provider.id}}">{{provider.name}}</option>
                             </select>
@@ -25,45 +25,45 @@
                     </div>
                     <div class="col-sm-4">
                         <div class="input-group">
-                           <div class="input-group-addon">User:</div>
-                            <select class="form-control" ng-model="selectedUser" ng-disabled="!isProviderSelected" ng-change="setEnableControls();">
-                               <option value="0">--- Please select user ---</option>
-                                <option ng-repeat="user in users  | filter:{'providerId':selectedProvider}" value="{{user.userId}}">{{user.name}}</option>
+                            <div class="input-group-addon">Patient:</div>
+                            <select class="form-control" ng-model="selectedPatient" ng-disabled="!isProviderSelected || enableControls" ng-change="setEditPatient(); setEnableControls();">
+                                <option value="0">--- Please select patient ---</option>
+                                <option ng-repeat="patient in patients  | filter:{'providerId':selectedProvider}" value="{{patient.patientId}}">{{patient.fname}} {{patient.lname}}</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-sm-4">
                         <div class="input-group">
-                           <div class="input-group-addon">Patient:</div>
-                            <select class="form-control" ng-model="selectedPatient" ng-disabled="!isProviderSelected" ng-change="setEditPatient(); setEnableControls();">
-                               <option value="0">--- Please select patient ---</option>
-                                <option ng-repeat="patient in patients  | filter:{'providerId':selectedProvider}" value="{{patient.patientId}}">{{patient.fname}} {{patient.lname}}</option>
+                            <div class="input-group-addon">User:</div>
+                            <select class="form-control" ng-model="selectedUser" ng-disabled="!isProviderSelected || enableControls" ng-change="setEnableControls();">
+                                <option value="0">--- Please select user ---</option>
+                                <option ng-repeat="user in users  | filter:{'providerId':selectedProvider}" value="{{user.userId}}">{{user.name}}</option>
                             </select>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="panel-body">
-                <form id="editPatient" name="editPatient" sync-concurrent-update-directive>
+                <form id="editPatientForm" name="editPatientForm" sync-concurrent-update-directive>
                     <div class="alert" ng-class="alertClass" role="alert" ng-show="alertMsg && enableControls" ng-bind-html="alertMsg"></div>
                     <div class="form-group">
                         <label for="firstName">First Name</label>
-                        <input class="form-control" id="firstName" name="firstName" ng-model="editPatient.fname" ng-disabled="!enableControls">
+                        <input class="form-control" id="firstName" name="firstName" ng-model="editPatient.fname" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientForm.firstName" popover-trigger="'focus'">
                     </div>
                     <div class="form-group">
                         <label for="lastName">Last Name</label>
-                        <input class="form-control" id="lastName" name="lastName" ng-model="editPatient.lname" ng-disabled="!enableControls">
+                        <input class="form-control" id="lastName" name="lastName" ng-model="editPatient.lname" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientForm.lastName" popover-trigger="'focus'">
                     </div>
                     <div class="form-group">
                         <label for="cellNo">Contact No.</label>
-                        <input class="form-control" id="cellNo" name="cellNo" ng-model="editPatient.contact" ng-disabled="!enableControls">
+                        <input class="form-control" id="cellNo" name="cellNo" ng-model="editPatient.contact" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientForm.cellNo" popover-trigger="'focus'">
                     </div>
                     <div class="radio">
                         <label>
-                            <input type="radio" name="gender" value="Male" ng-model="editPatient.gender" ng-disabled="!enableControls"> Male
+                            <input type="radio" name="gender" value="Male" ng-model="editPatient.gender" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientForm.gender" popover-trigger="'focus'"> Male
                         </label>
                         <label>
-                            <input type="radio" name="gender" value="Female" ng-model="editPatient.gender" ng-disabled="!enableControls"> Female
+                            <input type="radio" name="gender" value="Female" ng-model="editPatient.gender" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientForm.gender" popover-trigger="'focus'"> Female
                         </label>
                     </div>
                     <button class="btn btn-default" type="reset">Cancel</button>
@@ -79,6 +79,8 @@
     <script src="./js/angular-1.5.8/angular.min.js"></script>
     <!-- Bootstrap JS -->
     <script src="./js/bootstrap.min.js"></script>
+    <!-- Bootstrap ui-->
+    <script src="./js/ui-bootstrap-tpls-2.3.0.min.js"></script>
     <script src="./app.js"></script>
 </body>
 
