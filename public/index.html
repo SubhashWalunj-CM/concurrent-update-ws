@@ -10,11 +10,11 @@
 
 <body>
     <div class='container' ng-controller="EditPatientController">
-        <h1>Concurrent update demo</h1>
+        <h3><center>Concurrent form update demo using WebSocket</center></h3>
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="row">
-                    <div class="col-sm-4">
+                    <div class="col-sm-4 top-margin-sm">
                         <div class="input-group">
                             <div class="input-group-addon">Provider:</div>
                             <select class="form-control" ng-model="selectedProvider" ng-change="setIsProviderSelected(); setEnableControls();" ng-disabled="enableControls">
@@ -23,7 +23,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-4 top-margin-sm">
                         <div class="input-group">
                             <div class="input-group-addon">Patient:</div>
                             <select class="form-control" ng-model="selectedPatient" ng-disabled="!isProviderSelected || enableControls" ng-change="setEditPatient(); setEnableControls();">
@@ -32,7 +32,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-4 top-margin-sm">
                         <div class="input-group">
                             <div class="input-group-addon">User:</div>
                             <select class="form-control" ng-model="selectedUser" ng-disabled="!isProviderSelected || enableControls" ng-change="setEnableControls();">
@@ -60,10 +60,10 @@
                     </div>
                     <div class="radio">
                         <label>
-                            <input type="radio" name="gender" value="Male" ng-model="editPatient.gender" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientForm.gender" popover-trigger="'focus'"> Male
+                            <input type="radio" name="gender" value="M" ng-model="editPatient.gender" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientForm.gender" popover-trigger="'focus'"> Male
                         </label>
                         <label>
-                            <input type="radio" name="gender" value="Female" ng-model="editPatient.gender" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientForm.gender" popover-trigger="'focus'"> Female
+                            <input type="radio" name="gender" value="F" ng-model="editPatient.gender" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientForm.gender" popover-trigger="'focus'"> Female
                         </label>
                     </div>
                     <button class="btn btn-default" type="reset">Cancel</button>

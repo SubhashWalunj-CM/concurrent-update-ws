@@ -1,4 +1,3 @@
-// http://ejohn.org/blog/ecmascript-5-strict-mode-json-and-more/
 "use strict";
 
 // Optional. You will see this name in eg. 'ps' or 'top' command
@@ -16,15 +15,6 @@ var concurrentUpdateDataHolder = {};
 // Connected clients
 var clients = [];
 var connectedClients = {};
-
-/**
- * Helper function for escaping input strings
- */
-function htmlEntities(str) {
-    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
-
 
 /**
  * HTTP server
@@ -78,7 +68,6 @@ wsServer.on('request', function (request) {
 
     // accept connection - you should check 'request.origin' to make sure that
     // client is connecting from your website
-    // (http://en.wikipedia.org/wiki/Same_origin_policy)
     var connection = request.accept(null, request.origin);
 
     clients.push(connection);

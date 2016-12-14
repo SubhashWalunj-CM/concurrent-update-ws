@@ -22,3 +22,11 @@
   opacity: 1;
   display: block !important;
 }
+
+.top-margin-sm {
+    margin-top: 5px;
+}
+
+.top-margin-md {
+    margin-top: 10px;
+}
