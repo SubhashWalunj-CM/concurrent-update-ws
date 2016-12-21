@@ -44,30 +44,249 @@
                 </div>
             </div>
             <div class="panel-body">
-                <form id="editPatientForm" name="editPatientForm" sync-concurrent-update-directive>
+                <h4>Member Information</h4>
+                <form id="editPatientMemInfo" name="editPatientMemInfo" sync-concurrent-update-directive>
                     <div class="alert" ng-class="alertClass" role="alert" ng-show="alertMsg && enableControls" ng-bind-html="alertMsg"></div>
                     <div class="form-group">
                         <label for="firstName">First Name</label>
-                        <input class="form-control" id="firstName" name="firstName" ng-model="editPatient.fname" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientForm.firstName" popover-trigger="'focus'">
+                        <input class="form-control" id="firstName" name="firstName" ng-model="editPatient.fname" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientMemInfo.firstName" popover-trigger="'focus'">
                     </div>
                     <div class="form-group">
                         <label for="lastName">Last Name</label>
-                        <input class="form-control" id="lastName" name="lastName" ng-model="editPatient.lname" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientForm.lastName" popover-trigger="'focus'">
+                        <input class="form-control" id="lastName" name="lastName" ng-model="editPatient.lname" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientMemInfo.lastName" popover-trigger="'focus'">
                     </div>
                     <div class="form-group">
                         <label for="cellNo">Contact No.</label>
-                        <input class="form-control" id="cellNo" name="cellNo" ng-model="editPatient.contact" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientForm.cellNo" popover-trigger="'focus'">
+                        <input class="form-control" id="cellNo" name="cellNo" ng-model="editPatient.contact" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientMemInfo.cellNo" popover-trigger="'focus'">
                     </div>
                     <div class="radio">
                         <label>
-                            <input type="radio" name="gender" value="M" ng-model="editPatient.gender" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientForm.gender" popover-trigger="'focus'"> Male
+                            <input type="radio" name="gender" value="M" ng-model="editPatient.gender" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientMemInfo.gender" popover-trigger="'focus'"> Male
                         </label>
                         <label>
-                            <input type="radio" name="gender" value="F" ng-model="editPatient.gender" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientForm.gender" popover-trigger="'focus'"> Female
+                            <input type="radio" name="gender" value="F" ng-model="editPatient.gender" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientMemInfo.gender" popover-trigger="'focus'"> Female
                         </label>
                     </div>
-                    <button class="btn btn-default" type="reset">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <!--<button class="btn btn-default" type="reset">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>-->
+                </form>
+                <hr>
+                <h4>Vital signs</h4>
+                <form id="editPatientVital" name="editPatientVital" class="top-margin-md bottom-margin-sm" sync-concurrent-update-directive>
+                   <div class="alert" ng-class="alertClass" role="alert" ng-show="alertMsg && enableControls" ng-bind-html="alertMsg"></div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label for="vitalEditTemp">Temperature</label>
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 top-margin-sm">
+                                        <input class="form-control" id="vitalEditTemp" name="vitalEditTemp" ng-model="vitals.temp" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientVital.vitalEditTemp" popover-trigger="'focus'">
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 top-margin-sm">
+                                        <select class="form-control" id="vitalEditTempUnit" name="vitalEditTempUnit" ng-model="vitals.tempUnit" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientVital.vitalEditTempUnit" popover-trigger="'focus'">
+                                            <option value="F">&#8457;</option>
+                                            <option value="C">&#8451;</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 top-margin-sm">
+                                        <select class="form-control" id="vitalEditTempRoute" name="vitalEditTempRoute" ng-model="vitals.tempRoute" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientVital.vitalEditTempRoute" popover-trigger="'focus'">
+                                            <option value="Oral">Oral</option>
+                                            <option value="Axillary">Axillary</option>
+                                            <option value="Ear">Ear</option>
+                                            <option value="Rectal">Rectal</option>
+                                            <option value="Temporal">Temporal</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label for="vitalEditPain">Pain</label>
+                                <div class="input-group">
+                                    <select class="form-control" id="vitalEditPain" name="vitalEditPain" ng-model="vitals.pain" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientVital.vitalEditPain" popover-trigger="'focus'">
+                                        <option>-- Select a range --</option>
+                                        <option value="">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                    </select>
+                                    <div class="input-group-addon">/ 10</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label for="vitalEditPulse">Pulse</label>
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 top-margin-sm">
+                                        <input class="form-control" id="vitalEditPulse" name="vitalEditPulse" ng-model="vitals.pulse" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientVital.vitalEditPulse" popover-trigger="'focus'">
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12  top-margin-sm">
+                                        <select class="form-control" id="vitalEditPulseType" name="vitalEditPulseType" ng-model="vitals.pulseType" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientVital.vitalEditPulseType" popover-trigger="'focus'">
+                                            <option value="Regular">Regular</option>
+                                            <option value="Irregular">Irregular</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label for="vitalEditHeight">Height</label>
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 top-margin-sm">
+                                        <input class="form-control" id="vitalEditHeight" placeholder="ft" name="vitalEditHeight" ng-model="vitals.height" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientVital.vitalEditHeight" popover-trigger="'focus'">
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 top-margin-sm">
+                                        <input class="form-control" id="vitalEditHeight2" placeholder="in" name="vitalEditHeight2" ng-model="vitals.height2" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientVital.vitalEditHeight2" popover-trigger="'focus'">
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 top-margin-sm">
+                                        <select class="form-control" id="vitalEditHeightUnit" name="vitalEditHeightUnit" ng-model="vitals.heightUnit" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientVital.vitalEditHeightUnit" popover-trigger="'focus'">
+                                            <option value="ft-in">ft-in</option>
+                                            <option value="in">in</option>
+                                            <option value="m">m</option>
+                                            <option value="cm">cm</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label for="vitalEditRespir">Respiration</label>
+                                <input class="form-control" id="vitalEditRespir" name="vitalEditRespir" ng-model="vitals.respir" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientVital.vitalEditRespir" popover-trigger="'focus'">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label for="vitalEditWeight">Weight</label>
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 top-margin-sm">
+                                        <input class="form-control" id="vitalEditWeight" placeholder="lbs" name="vitalEditWeight" ng-model="vitals.weight" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientVital.vitalEditWeight" popover-trigger="'focus'">
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 top-margin-sm">
+                                        <input class="form-control" id="vitalEditWeight2" placeholder="oz" name="vitalEditWeight2" ng-model="vitals.weight2" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientVital.vitalEditWeight2" popover-trigger="'focus'">
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 top-margin-sm">
+                                        <select class="form-control" id="vitalEditWeightUnit" name="vitalEditWeightUnit" ng-model="vitals.weightUnit" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientVital.vitalEditWeightUnit" popover-trigger="'focus'">
+                                            <option value="lbs-oz">lbs-oz</option>
+                                            <option value="lbs">lbs</option>
+                                            <option value="kg">kg</option>
+                                            <option value="gm">gm</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label for="vitalEditO2sat">O2 Sat</label>
+                                <div class="input-group">
+                                    <input class="form-control" id="vitalEditO2sat" name="vitalEditO2sat" ng-model="vitals.oxSat" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientVital.vitalEditO2sat" popover-trigger="'focus'">
+                                    <div class="input-group-addon">%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label for="vitalEditHeadCircum">Head Circumference</label>
+                                <div class="input-group">
+                                    <input class="form-control" id="vitalEditHeadCircum" name="vitalEditHeadCircum" ng-model="vitals.headCircum" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientVital.vitalEditHeadCircum" popover-trigger="'focus'">
+                                    <div class="input-group-addon">cm</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <div class="form-group no-margin">
+                                <label for="vitalEditBpLow">Blood Pressure</label>
+                                <div class="row">
+                                    <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12 top-margin-sm">
+                                        <div class="input-group">
+                                            <input class="form-control" id="vitalEditBpLow" placeholder="Diastolic" name="vitalEditBpLow" ng-model="vitals.bpLow" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientVital.vitalEditBpLow" popover-trigger="'focus'">
+                                            <div class="input-group-addon">/</div>
+                                            <input class="form-control" id="vitalEditBpHigh" placeholder="Systolic" name="vitalEditBpHigh" ng-model="vitals.bpHigh" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientVital.vitalEditBpHigh" popover-trigger="'focus'">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12 top-margin-sm">
+                                        <select class="form-control" id="vitalEditBpSite" name="vitalEditBpSite" ng-model="vitals.bpSite" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientVital.vitalEditBpSite" popover-trigger="'focus'">
+                                            <option value="Left Arm">Left Arm</option>
+                                            <option value="Right Arm">Right Arm</option>
+                                            <option value="Left Thigh">Left Thigh</option>
+                                            <option value="Right Thigh">Right Thigh</option>
+                                            <option value="Left Forearm">Left Forearm</option>
+                                            <option value="Right Forearm">Right Forearm</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <div class="row">
+                                <div class="label-margin no-margin">
+                                    <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12 top-margin-sm">
+                                        <div class="form-group no-margin">
+                                            <select class="form-control" id="vitalEditBpPosition" name="vitalEditBpPosition" ng-model="vitals.bpPosition" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientVital.vitalEditBpPosition" popover-trigger="'focus'">
+                                                <option value="Sitting Position">Sitting Position</option>
+                                                <option value="Standing Position">Standing Position</option>
+                                                <option value="Supine">Supine</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12 top-margin-sm">
+                                        <div class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="control-label col-lg-5 col-md-5 col-sm-12 col-xs-12" for="vitalEditBpCupSize">Cuff Size:</label>
+                                                <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
+                                                    <select class="form-control" id="vitalEditBpCupSize" name="vitalEditBpCupSize" ng-model="vitals.cuffSize" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientVital.vitalEditBpCupSize" popover-trigger="'focus'">
+                                                        <option value="Baby">Baby</option>
+                                                        <option value="Small">Small</option>
+                                                        <option value="Standard">Standard</option>
+                                                        <option value="Large">Large</option>
+                                                        <option value="Leg">Leg</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label for="vitalEditWaistCircum">Waist Circumference</label>
+                                <div class="input-group">
+                                    <input class="form-control" id="vitalEditWaistCircum" name="vitalEditWaistCircum" ng-model="vitals.waistCircum" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientVital.vitalEditWaistCircum" popover-trigger="'focus'">
+                                    <div class="input-group-addon">in</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label for="vitalEditChildPrest">Child Presentation</label>
+                                <select class="form-control" id="vitalEditChildPrest" name="vitalEditChildPrest" ng-model="vitals.childPrest" ng-disabled="!enableControls" uib-popover-html="dynamicPopover.editPatientVital.vitalEditChildPrest" popover-trigger="'focus'">
+                                    <option value="Clother">Clother</option>
+                                    <option value="Unclother">Unclother</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
