@@ -97,6 +97,7 @@ wsServer.on('request', function (request) {
                 
                 var json = {};
                 json["type"] = "WORKING-USER-RESP";
+                json["formId"] = reqJson.formId;
                 json["workingUsers"] = [];
                 
                 for(var key in connectedClients[reqJson.providerId][reqJson.patientId][reqJson.formId]) {
@@ -118,6 +119,7 @@ wsServer.on('request', function (request) {
 
                 var respData = concurrentUpdateDataHolder.concurrentUpdateData[reqJson.providerId][reqJson.patientId][reqJson.formId];
                 respData["type"] = "FORM-CHANGE-RESP";
+                respData["formId"] = reqJson.formId;
                 
                 for(var key in connectedClients[reqJson.providerId][reqJson.patientId][reqJson.formId]) {
                     connectedClients[reqJson.providerId][reqJson.patientId][reqJson.formId][reqJson.userId]["connection"] = connection;

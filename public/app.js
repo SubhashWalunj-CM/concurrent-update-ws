@@ -1,10 +1,5 @@
 (function () {
-    var concurrentUpdate = angular.module('concurrentUpdate', ['ui.bootstrap']);
-
-    concurrentUpdate.value('webSocketConstants', {
-        webSocketUrl: 'ws://127.0.0.1:1337',
-        concurrentUpdateWsCon: {}
-    });
+    var concurrentUpdate = angular.module('concurrentUpdate', ['wsConcurrentFormUpdate']);
 
     var EditPatientController = function ($scope) {
         $scope.isProviderSelected = false;

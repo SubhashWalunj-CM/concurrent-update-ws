@@ -45,7 +45,7 @@
             </div>
             <div class="panel-body">
                 <h4>Member Information</h4>
-                <form id="editPatientMemInfo" name="editPatientMemInfo" sync-concurrent-update-directive>
+                <form id="editPatientMemInfo" name="editPatientMemInfo" wscfu-sync-update-directive>
                     <div class="alert" ng-class="alertClass" role="alert" ng-show="alertMsg && enableControls" ng-bind-html="alertMsg"></div>
                     <div class="form-group">
                         <label for="firstName">First Name</label>
@@ -72,7 +72,7 @@
                 </form>
                 <hr>
                 <h4>Vital signs</h4>
-                <form id="editPatientVital" name="editPatientVital" class="top-margin-md bottom-margin-sm" sync-concurrent-update-directive>
+                <form id="editPatientVital" name="editPatientVital" class="top-margin-md bottom-margin-sm" wscfu-sync-update-directive>
                    <div class="alert" ng-class="alertClass" role="alert" ng-show="alertMsg && enableControls" ng-bind-html="alertMsg"></div>
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
@@ -300,6 +300,10 @@
     <script src="./js/bootstrap.min.js"></script>
     <!-- Bootstrap ui-->
     <script src="./js/ui-bootstrap-tpls-2.3.0.min.js"></script>
+    
+    <!-- WebSocket Concurrent form update provider -->
+    <script src="./js/ws-concurrent-form-update/ws-concurrent-form-update-1.0.0.js"></script>
+    <!-- app.js -->
     <script src="./app.js"></script>
 </body>
 

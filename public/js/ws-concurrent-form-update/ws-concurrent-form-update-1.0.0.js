@@ -1,14 +1,15 @@
 (function () {
-    var wsConcurrentFormUpdate = angular.module('wsConcurrentFormUpdate', []);
-    
+    var wsConcurrentFormUpdate = angular.module('wsConcurrentFormUpdate', ['ui.bootstrap']);
+
     wsConcurrentFormUpdate.value('webSocketConstants', {
-        webSocketUrl : 'ws://127.0.0.1:1337',
-        formFieldData : {},
-        formControls : {},
-        concurrentUpdateWsCon : {}
+        webSocketUrl: 'ws://127.0.0.1:1337',
+        formFieldData: {},
+        formControls: {},
+        concurrentUpdateWsCon: {},
+        connectedForms: []
     });
-    
-    var syncConcurrentUpdateDirective = function ($rootScope, $sce, webSocketConstants) {
+
+    var wscfuSyncUpdateDirective = function ($rootScope, $sce, webSocketConstants) {
         function formatArrayJoin(arr, separator, lastSeparator) {
             var outStr = "";
             if (arr.length === 1) {
@@ -29,20 +30,28 @@
             });
             reqJson["type"] = "FORM-CHANGE-REQ";
             reqJson["fields"] = formFieldData;
+            reqJson.formId = form.$name;
             webSocketConstants.concurrentUpdateWsCon.send(JSON.stringify(reqJson));
         }
 
         return {
             require: "form",
             link: function (scope, element, attrs) {
-                //scope.dynamicPopover = {};
                 scope.dynamicPopover[attrs.name] = {};
+                webSocketConstants.connectedForms.push(scope[attrs.name]);
+
                 scope.$watch('enableControls', function (newValue, oldValue) {
                     if (newValue) {
                         webSocketConstants.formFieldData[attrs.name] = {};
                         webSocketConstants.formControls[attrs.name] = [];
-                        
                         var form = scope[attrs.name];
+                        var reqJson = {
+                            "providerId": scope.selectedProvider,
+                            "patientId": scope.selectedPatient,
+                            "formId": "",
+                            "userId": scope.selectedUser
+                        };
+                        
                         angular.forEach(form, function (value, key) {
                             if (typeof value === 'object' && value.hasOwnProperty('$modelValue')) {
                                 webSocketConstants.formFieldData[attrs.name][value.$name] = value.$modelValue;
@@ -50,12 +59,6 @@
                             }
                         });
 
-                        var reqJson = {
-                            "providerId": scope.selectedProvider,
-                            "patientId": scope.selectedPatient,
-                            "formId": attrs.id,
-                            "userId": scope.selectedUser
-                        };
                         scope.alertClass = "alert-info";
 
                         window.WebSocket = window.WebSocket || window.MozWebSocket;
@@ -66,10 +69,14 @@
                             if (angular.equals(webSocketConstants.concurrentUpdateWsCon, {})) {
                                 webSocketConstants.concurrentUpdateWsCon = new WebSocket(webSocketConstants.webSocketUrl);
                             }
-                            
+
                             webSocketConstants.concurrentUpdateWsCon.onopen = function () {
                                 reqJson["type"] = "REGISTER-CONNECTION-REQ";
-                                webSocketConstants.concurrentUpdateWsCon.send(JSON.stringify(reqJson));
+
+                                angular.forEach(webSocketConstants.connectedForms, function (form, key) {
+                                    reqJson.formId = form.$name;
+                                    webSocketConstants.concurrentUpdateWsCon.send(JSON.stringify(reqJson));
+                                });
                             };
 
                             webSocketConstants.concurrentUpdateWsCon.onerror = function (error) {
@@ -104,7 +111,12 @@
                                                 scope.alertMsg = $sce.trustAsHtml("<strong>" + formatArrayJoin(angular.copy(workingUserNameArr), ',', 'and') + "</strong> is working on this form.");
                                                 scope.$apply();
 
-                                                triggerFormChangeReq(form, webSocketConstants.formFieldData[attrs.name], reqJson);
+                                                angular.forEach(webSocketConstants.connectedForms, function(form, key){
+                                                    if(form.$name == resp.formId) {
+                                                        triggerFormChangeReq(form, webSocketConstants.formFieldData[resp.formId], reqJson);
+                                                        return;
+                                                    }
+                                                });                                                
                                             }
                                         }
                                         break;
@@ -113,7 +125,7 @@
                                             delete resp[scope.selectedUser];
                                         }
 
-                                        angular.forEach(webSocketConstants.formControls[attrs.name], function (control, controlKey) {
+                                        angular.forEach(webSocketConstants.formControls[resp.formId], function (control, controlKey) {
                                             var str = "";
                                             angular.forEach(resp, function (userFormData, userFormKey) {
                                                 angular.forEach(userFormData.fields, function (userFormFieldValue, userFormFieldKey) {
@@ -128,7 +140,7 @@
                                                     }
                                                 });
                                             });
-                                            scope.dynamicPopover[attrs.name][control.$name] = $sce.trustAsHtml(str);
+                                            scope.dynamicPopover[resp.formId][control.$name] = $sce.trustAsHtml(str);
                                             scope.$apply();
                                         });
                                         break;
@@ -151,6 +163,6 @@
             }
         }
     }
-    syncConcurrentUpdateDirective.$inject = ['$rootScope', '$sce', 'webSocketConstants'];
-    wsConcurrentFormUpdate.directive('syncConcurrentUpdateDirective', syncConcurrentUpdateDirective);
+    wscfuSyncUpdateDirective.$inject = ['$rootScope', '$sce', 'webSocketConstants'];
+    wsConcurrentFormUpdate.directive('wscfuSyncUpdateDirective', wscfuSyncUpdateDirective);
 })();
